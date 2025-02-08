@@ -8,7 +8,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import HomeP from './Components/HomeP';
 import { v4 as uuidV4 } from "uuid";
 
 import Navbar from "./Components/Navbar";
@@ -62,7 +61,6 @@ function App() {
             path="/documents/:roomId"
             element={<EditorPage />} 
           />
-          <Route path='/homep' element={<HomeP/>}/>
              {/* <Route path="/editor/:roomId" element={<EditorPage/>}/> */}
         
         </Routes>

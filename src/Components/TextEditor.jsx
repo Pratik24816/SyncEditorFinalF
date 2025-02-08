@@ -3,8 +3,8 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { io } from "socket.io-client";
 import { saveAs } from "file-saver";
-import { Document, Packer, Paragraph } from "docx";
-import * as mammoth from "mammoth"; // To extract text from Word files
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { importAsQuill } from "../Utilities/importAsQuill"; // Import logic
 
 const TOOLBAR_OPTIONS = [
     [{ font: [] }], [{ color: [] }, { background: [] }],
@@ -64,8 +64,22 @@ export default function TextEditor({ socketRef, roomId, username }) {
         return () => socket.off("receive-changes", handler);
     }, [socket, quill]);
 
-    // ✅ Export to Word Document (.docx)
-    const exportToWord = async () => {
+    useEffect(() => {
+        if (!socket || !quill) return;
+        
+        // Listen for imported file changes
+        const handleFileImported = (delta) => {
+            quill.setContents(delta);
+        };
+    
+        socket.on("receive-file", handleFileImported);
+    
+        return () => {
+            socket.off("receive-file", handleFileImported);
+        };
+    }, [socket, quill]);
+
+    const saveDocumentAsDocx = async () => {
         if (!quill) return;
         const text = quill.getText().trim();
 
@@ -90,32 +104,6 @@ export default function TextEditor({ socketRef, roomId, username }) {
         }
     };
 
-    // ✅ Import File (.txt, .html, .docx)
-    const importFile = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-            const fileType = file.name.split(".").pop().toLowerCase();
-            const content = e.target.result;
-
-            if (fileType === "txt" || fileType === "html") {
-                quill.setText(content);
-            } else if (fileType === "docx") {
-                const result = await mammoth.extractRawText({ arrayBuffer: content });
-                quill.setText(result.value);
-            }
-        };
-
-        if (file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-            reader.readAsArrayBuffer(file);
-        } else {
-            reader.readAsText(file);
-        }
-    };
-
     return (
         <div>
             <div
@@ -130,25 +118,18 @@ export default function TextEditor({ socketRef, roomId, username }) {
                     q.setText("Loading...");
                     setQuill(q);
 
-                    // Add Save and Import buttons to the toolbar
                     const toolbar = q.getModule("toolbar");
 
                     const saveButton = document.createElement("button");
                     saveButton.innerHTML = "💾";
                     saveButton.style.marginLeft = "10px";
-                    saveButton.addEventListener("click", exportToWord);
+                    saveButton.addEventListener("click", saveDocumentAsDocx);
                     toolbar.container.appendChild(saveButton);
 
                     const importButton = document.createElement("button");
                     importButton.innerHTML = "📂";
                     importButton.style.marginLeft = "10px";
-                    importButton.addEventListener("click", () => {
-                        const fileInput = document.createElement("input");
-                        fileInput.type = "file";
-                        fileInput.accept = ".txt, .html, .docx";
-                        fileInput.onchange = importFile;
-                        fileInput.click();
-                    });
+                    importButton.addEventListener("click", () => importAsQuill(q, socket));
                     toolbar.container.appendChild(importButton);
                 }, [])}
             />
