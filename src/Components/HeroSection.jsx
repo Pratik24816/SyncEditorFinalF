@@ -13,8 +13,18 @@ const HeroSection = () => {
   const [generatedRoomId, setGeneratedRoomId] = useState("");
 
   // Handle "Create Room"
+  // const handleCreateRoom = () => {
+  //   const newRoomId = uuidV4();
+  //   setGeneratedRoomId(newRoomId);
+  //   setPopupType("create");
+  // };
+
+  const generateShortRoomId = () => {
+    return Math.random().toString(36).substring(2, 12); // Generates a 10-character string
+  };
+
   const handleCreateRoom = () => {
-    const newRoomId = uuidV4();
+    const newRoomId = generateShortRoomId();
     setGeneratedRoomId(newRoomId);
     setPopupType("create");
   };

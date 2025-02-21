@@ -13,6 +13,13 @@
 :root {
   font-family: "Poppins", sans-serif;
 }
+/* Custom CSS for image alignment */
+.ql-editor img {
+  float: left; /* Float the image to the left */
+  margin-right: 15px; /* Add some margin to the right of the image */
+  margin-bottom: 15px; /* Add some margin below the image */
+  max-width: 50%; /* Limit the image width to 50% of the container */
+}
 
 body {
   background-color: #000000;
@@ -72,6 +79,7 @@ body {
   }
 }
 
+
 /* Save button style */
  .ql-save::before {
   content: '💾'; 
@@ -103,4 +111,83 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }  
+/* PDF Modal Styles */
+.pdf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.pdf-modal {
+  background-color: #2d3748; /* Dark background to match your theme */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.pdf-modal h3 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+  color: #ffffff; /* White text */
+}
+
+.pdf-modal p {
+  margin: 0 0 15px;
+  color: #cbd5e0; /* Light gray text */
+}
+
+.pdf-modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #4a5568; /* Dark border */
+  border-radius: 5px;
+  background-color: #1a202c; /* Dark input background */
+  color: #ffffff; /* White text */
+  font-size: 1rem;
+}
+
+.pdf-modal input::placeholder {
+  color: #718096; /* Placeholder text color */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#savePdfButton {
+  background-color: #4299e1; /* Blue button */
+  color: #ffffff;
+}
+
+#savePdfButton:hover {
+  background-color: #3182ce; /* Darker blue on hover */
+}
+
+#cancelPdfButton {
+  background-color: #e53e3e; /* Red button */
+  color: #ffffff;
+}
+
+#cancelPdfButton:hover {
+  background-color: #c53030; /* Darker red on hover */
+}

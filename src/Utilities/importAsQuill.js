@@ -1,6 +1,7 @@
 import Mammoth from "mammoth";
 
 export const importAsQuill=(quill,socket)=>{
+    console.log("welcome");
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = ".docx";

@@ -10,7 +10,7 @@ const ACTIONS = {};
 
 const fetchActions = async () => {
     try {
-        const res = await fetch("http://localhost:5000/api/actions");
+        const res = await fetch("https://synceditorbec.onrender.com/api/actions");
         const data = await res.json();
         data.forEach(action => ACTIONS[action.toUpperCase().replace("-", "_")] = action);
         console.log("✅ Actions Loaded:", ACTIONS);
@@ -76,6 +76,21 @@ const EditorPage = () => {
         };
     }, [roomId, location.state?.username]);
 
+    // Handle browser/tab closing
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; // This is required for Chrome
+            return 'Are you sure you want to leave? Your changes may not be saved.'; // This is for other browsers
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     const copyRoomId = async () => {
         try {
             await navigator.clipboard.writeText(roomId);
@@ -86,11 +101,14 @@ const EditorPage = () => {
     };
 
     const leaveRoom = () => {
-        if (socketRef.current) {
-            socketRef.current.emit(ACTIONS.DISCONNECTED, { socketId: socketRef.current.id });
-            socketRef.current.disconnect();
+        const confirmLeave = window.confirm("Are you sure you want to leave the room?");
+        if (confirmLeave) {
+            if (socketRef.current) {
+                socketRef.current.emit(ACTIONS.DISCONNECTED, { socketId: socketRef.current.id });
+                socketRef.current.disconnect();
+            }
+            reactNavigator("/");
         }
-        reactNavigator("/");
     };
 
     if (!location.state) {
