@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './index.css';
-import TextEditor from './Components/TextEditor';
 import EditorPage from './Components/EditorPage';
 import {
   BrowserRouter as Router,
@@ -8,7 +7,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { v4 as uuidV4 } from "uuid";
 
 import Navbar from "./Components/Navbar";
 import HeroSection from "./Components/HeroSection";
@@ -70,3 +68,5 @@ function App() {
 }
 
 export default App;
+
+

@@ -10,12 +10,11 @@ const ACTIONS = {};
 
 const fetchActions = async () => {
     try {
-        const res = await fetch("https://synceditorbec.onrender.com/api/actions");
+        const res = await fetch("http://localhost:5000/api/actions");
         const data = await res.json();
         data.forEach(action => ACTIONS[action.toUpperCase().replace("-", "_")] = action);
-        console.log("✅ Actions Loaded:", ACTIONS);
     } catch (error) {
-        console.error("❌ Error fetching actions:", error);
+        console.error("Error fetching actions:", error);
     }
 };
 
@@ -25,6 +24,7 @@ const EditorPage = () => {
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
     const [clients, setClients] = useState([]);
+    
 
     useEffect(() => {
         const init = async () => {
@@ -36,7 +36,6 @@ const EditorPage = () => {
             socketRef.current.on('connect_failed', handleErrors);
     
             function handleErrors(e) {
-                console.log('Socket error:', e);
                 toast.error('Socket connection failed, try again later.');
                 reactNavigator('/');
             }
@@ -70,46 +69,9 @@ const EditorPage = () => {
             if (socketRef.current) {
                 socketRef.current.emit(ACTIONS.DISCONNECTED, { socketId: socketRef.current.id });
                 socketRef.current.disconnect();
-                socketRef.current.off(ACTIONS.JOINED);
-                socketRef.current.off(ACTIONS.DISCONNECTED);
             }
         };
     }, [roomId, location.state?.username]);
-
-    // Handle browser/tab closing
-    useEffect(() => {
-        const handleBeforeUnload = (e) => {
-            e.preventDefault();
-            e.returnValue = ''; // This is required for Chrome
-            return 'Are you sure you want to leave? Your changes may not be saved.'; // This is for other browsers
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
-
-    const copyRoomId = async () => {
-        try {
-            await navigator.clipboard.writeText(roomId);
-            toast.success("Room ID copied to clipboard!");
-        } catch (err) {
-            toast.error("Failed to copy Room ID.");
-        }
-    };
-
-    const leaveRoom = () => {
-        const confirmLeave = window.confirm("Are you sure you want to leave the room?");
-        if (confirmLeave) {
-            if (socketRef.current) {
-                socketRef.current.emit(ACTIONS.DISCONNECTED, { socketId: socketRef.current.id });
-                socketRef.current.disconnect();
-            }
-            reactNavigator("/");
-        }
-    };
 
     if (!location.state) {
         return <Navigate to="/" />;
@@ -127,7 +89,7 @@ const EditorPage = () => {
                 <h3 className="text-xl font-semibold text-center mt-4 mb-2">Connected Users</h3>
                 <div className="flex flex-col space-y-3 overflow-y-auto max-h-[55vh] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                     {clients.map(client => (
-                        <Client key={client.socketId} username={client.username} />
+                        <Client key={client.socketId} username={client.username} socketId={client.socketId} />
                     ))}
                 </div>
                 <div className="mt-auto space-y-2">
@@ -147,6 +109,38 @@ const EditorPage = () => {
             </div>
         </div>
     );
+
+    async function copyRoomId() {
+        try {
+            await navigator.clipboard.writeText(roomId);
+            toast.success("Room ID copied to clipboard!");
+        } catch (err) {
+            toast.error("Failed to copy Room ID.");
+        }
+    }
+
+    function leaveRoom() {
+        const confirmLeave = window.confirm("Are you sure you want to leave the room?");
+        if (confirmLeave) {
+            if (socketRef.current) {
+                socketRef.current.emit(ACTIONS.DISCONNECTED, { socketId: socketRef.current.id });
+                socketRef.current.disconnect();
+            }
+            reactNavigator("/");
+        }
+    }
 };
 
 export default EditorPage;
+
+
+
+
+
+
+
+
+
+
+
+

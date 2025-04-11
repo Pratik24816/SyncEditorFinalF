@@ -1,7 +1,7 @@
 import { resourcesLinks, platformLinks, communityLinks } from "../constants";
-const Footer = () => {
+const Footer = (currentTheme ) => {
   return (
-    <footer className="mt-20 border-t py-10 border-neutral-700">
+    <footer className="mt-20 border-t py-10 style={{ borderColor: currentTheme.particleColor }}">
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <div>
           <h3 className="text-md font-semibold mb-4 text-white">Resources</h3>
@@ -25,7 +25,7 @@ const Footer = () => {
               <li key={index}>
                 <a
                   href={link.href}
-                  className="text-neutral-300 hover:text-white"
+                  className="text-neutral-300 hover:text-white transition-colors style={{ color: currentTheme.particleColor }}"
                 >
                   {link.text}
                 </a>

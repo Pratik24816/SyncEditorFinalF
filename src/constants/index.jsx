@@ -102,42 +102,23 @@ export const checklistItems = [
 
 export const features = [
   {
-    icon: <BatteryCharging/>, // Represents code and syntax highlighting
-    text: "Syntax Highlighting",
-    description:
-      "Enhance code readability with syntax highlighting for a wide range of programming languages.",
+    icon: "🚀",
+    title: "Real-time Collaboration",
+    description: "Work together on documents simultaneously with instant updates"
   },
   {
-    icon: <BotMessageSquare />, // Represents cross-platform or multi-device support
-    text: "Multi-Platform Support",
-    description:
-      "Access your editor on desktop, web, or mobile devices for seamless code editing anywhere.",
+    icon: "👥",
+    title: "Live Cursors",
+    description: "See where others are editing in real-time"
   },
   {
-    icon: <Fingerprint />, // Represents snippets or reusable elements
-    text: "Code Snippets",
-    description:
-      "Speed up development with reusable code snippets and templates for commonly used patterns.",
-  },
-  {
-    icon: <ShieldHalf />, // Represents teamwork or collaboration
-    text: "Real-Time Collaboration",
-    description:
-      "Collaborate with team members in real-time with features like live edits and comments.",
-  },
-  {
-    icon: <PlugZap />, // Represents version control, specifically Git
-    text: "Version Control Integration",
-    description:
-      "Easily manage your code versions with built-in Git integration and seamless workflows.",
-  },
-  {
-    icon: <GlobeLock />, // Represents customization and plugins
-    text: "Extensive Plugin Support",
-    description:
-      "Customize your editor with a vast library of plugins and extensions to suit your workflow.",
-  },
+    icon: "💾",
+    title: "Auto Save",
+    description: "Your changes are saved automatically every few seconds"
+  }
 ];
+
+
 export const pricingOptions = [
   {
     title: "Free",
