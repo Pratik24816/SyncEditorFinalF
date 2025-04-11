@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
+// const SOCKET_SERVER_URL = "http://localhost:5000"; 
+const SOCKET_SERVER_URL = "https://synceditorfinalb.onrender.com";
 
-const SOCKET_SERVER_URL = "http://localhost:5000"; // Update to match backend port
 
 export const initSocket = async () => {
     const options = {

@@ -8,9 +8,22 @@ import { useLocation, useNavigate, Navigate, useParams } from "react-router-dom"
 
 const ACTIONS = {};
 
+
+
+// const fetchActions = async () => {
+//     try {
+//         const res = await fetch("http://localhost:5000/api/actions");
+//         const data = await res.json();
+//         data.forEach(action => ACTIONS[action.toUpperCase().replace("-", "_")] = action);
+//     } catch (error) {
+//         console.error("Error fetching actions:", error);
+//     }
+// };
+
+
 const fetchActions = async () => {
     try {
-        const res = await fetch("http://localhost:5000/api/actions");
+        const res = await fetch("https://synceditorfinalb.onrender.com");
         const data = await res.json();
         data.forEach(action => ACTIONS[action.toUpperCase().replace("-", "_")] = action);
     } catch (error) {
