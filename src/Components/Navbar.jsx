@@ -18,12 +18,7 @@ const Navbar = () => {
             <span className="text-xl tracking-tight text-white">SyncEditor</span>
           </div>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
-          <a
-            href="#"
-            className="py-2 px-3 rounded-md bg-gradient-to-r from-blue-500 to-blue-800 dark:from-blue-700 dark:to-blue-900 hover:from-blue-400 hover:to-blue-700 text-white"
-        >
-          Create Group
-          </a>
+       
 
           </div>
           <div className="lg:hidden md:flex flex-col justify-end">
@@ -34,14 +29,7 @@ const Navbar = () => {
         </div>
         {mobileDrawerOpen && (
           <div className="fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden">
-            <div className="flex space-x-6">
-              <a
-                href="#"
-                className="py-2 px-3 rounded-md bg-gradient-to-r from-blue-500 to-blue-800 dark:from-blue-700 dark:to-blue-900 hover:from-blue-400 hover:to-blue-700 text-white"
-              >
-                Create Group
-              </a>
-            </div>
+          
           </div>
         )}
       </div>
