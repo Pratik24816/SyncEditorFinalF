@@ -23,7 +23,7 @@ const ACTIONS = {};
 
 const fetchActions = async () => {
     try {
-        const res = await fetch("https://synceditorfinalb.onrender.com");
+        const res = await fetch("https://synceditorfinalb.onrender.com/api/actions");
         const data = await res.json();
         data.forEach(action => ACTIONS[action.toUpperCase().replace("-", "_")] = action);
     } catch (error) {

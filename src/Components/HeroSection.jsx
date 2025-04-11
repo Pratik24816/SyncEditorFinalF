@@ -233,42 +233,6 @@ const HeroSection = () => {
             </div>
           </motion.div>
         </motion.div>
-
-        {/* Feature Highlights */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 }}
-        >
-          {[
-            {
-              icon: "🚀",
-              title: "Instant Collaboration",
-              desc: "Work together in real-time with no delays"
-            },
-            {
-              icon: "👥",
-              title: "Live Cursors",
-              desc: "See where others are editing in real-time"
-            },
-            {
-              icon: "💾",
-              title: "Auto Save",
-              desc: "Your work is saved automatically every few seconds"
-            }
-          ].map((feature, index) => (
-            <motion.div 
-              key={index}
-              className="bg-gray-800 bg-opacity-50 backdrop-blur-sm p-6 rounded-xl border border-gray-700"
-              whileHover={{ y: -5 }}
-            >
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
-              <p className="text-gray-300">{feature.desc}</p>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
 
       {/* Popup Modal */}
