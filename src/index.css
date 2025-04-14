@@ -58,7 +58,7 @@ body {
   position: sticky;
   flex-wrap: wrap;
   top: 0;
-  width: 80%;
+  width: 100%;
   z-index: 1;
   background-color: #F3F3F3;
   border: none;
