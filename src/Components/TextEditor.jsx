@@ -1509,6 +1509,136 @@ export default function TextEditor({ socketRef, roomId, username }) {
           }
         });
       };
+
+    
+          const saveDocumentAsPdf = async () => {
+        const quillEditor = document.querySelector(".ql-editor");
+        if (!quillEditor) {
+            alert("Error: Could not find the document content.");
+            return;
+        }
+        
+        // Create modal for PDF options
+        const modal = document.createElement("div");
+        modal.className = "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50";
+        modal.innerHTML = `
+            <div class="bg-gray-900 p-6 rounded-xl shadow-lg w-96 border border-blue-500">
+                <h3 class="text-white text-xl mb-4 font-bold">PDF Export Options</h3>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">File Name</label>
+                    <input type="text" id="pdfFileName" value="document-${roomId}" 
+                        class="w-full p-2 bg-gray-800 border border-blue-500 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">Page Size</label>
+                    <select id="pdfPageSize" class="w-full p-2 bg-gray-800 border border-blue-500 rounded text-white">
+                        <option value="a4">A4</option>
+                        <option value="letter">Letter</option>
+                        <option value="legal">Legal</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">Orientation</label>
+                    <select id="pdfOrientation" class="w-full p-2 bg-gray-800 border border-blue-500 rounded text-white">
+                        <option value="portrait">Portrait</option>
+                        <option value="landscape">Landscape</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button id="savePdfButton" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-colors duration-200">
+                        Export PDF
+                    </button>
+                    <button id="cancelPdfButton"
+                        class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition-colors duration-200">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        const fileNameInput = modal.querySelector("#pdfFileName");
+        fileNameInput.focus();
+        
+        modal.querySelector("#savePdfButton").addEventListener("click", async () => {
+            const fileName = fileNameInput.value.trim() || `document-${roomId}`;
+            const pageSize = modal.querySelector("#pdfPageSize").value;
+            const orientation = modal.querySelector("#pdfOrientation").value;
+            
+            modal.remove();
+            
+            try {
+                // Show loading indicator
+                const loading = document.createElement("div");
+                loading.className = "fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50";
+                loading.innerHTML = `<div class="text-white text-xl">Generating PDF... This may take a moment for large documents.</div>`;
+                document.body.appendChild(loading);
+                
+                // Create PDF
+                const pdf = new jsPDF({
+                    orientation,
+                    unit: 'mm',
+                    format: pageSize
+                });
+                
+                // Calculate page dimensions
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                
+                // Split content into pages
+                const editorHeight = quillEditor.scrollHeight;
+                const pageCount = Math.ceil(editorHeight / (pageHeight * 3.78)); // Convert mm to px
+                
+                for (let i = 0; i < pageCount; i++) {
+                    if (i > 0) pdf.addPage();
+                    
+                    const canvas = await html2canvas(quillEditor, {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: null,
+                        windowHeight: pageHeight * 3.78,
+                        y: i * pageHeight * 3.78,
+                        height: pageHeight * 3.78
+                    });
+                    
+                    const imgData = canvas.toDataURL("image/png");
+                    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+                    
+                    pdf.addImage(imgData, "PNG", 0, 0, pageWidth, imgHeight);
+                }
+                
+                pdf.save(`${fileName}.pdf`);
+                loading.remove();
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                alert("Failed to generate PDF. Please try again.");
+            }
+        });
+        
+        modal.querySelector("#cancelPdfButton").addEventListener("click", () => {
+            modal.remove();
+        });
+    };
+
+    const saveDocumentAsTxt = () => {
+        if (!quill) return;
+        
+        const content = quill.getText();
+        if (!content.trim()) {
+            alert("Document is empty!");
+            return;
+        }
+        
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, `document-${roomId}.txt`);
+    };
+    
+    
     
     const saveDocumentAsHtml = () => {
         if (!quill) return;
