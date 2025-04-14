@@ -1103,27 +1103,27 @@ export default function TextEditor({ socketRef, roomId, username }) {
 
    
     // Initialize socket connection
-    useEffect(() => {
-        const s = io("http://localhost:5000", {
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
-            transports: ["websocket"]
-        });
-        setSocket(s);
-        return () => s.disconnect();
-    }, []);
+  //  useEffect(() => {
+       // const s = io("http://localhost:5000", {
+           // reconnectionAttempts: 5,
+           // reconnectionDelay: 1000,
+           // transports: ["websocket"]
+       // });
+       // setSocket(s);
+      //  return () => s.disconnect();
+ //   }, []);
 
 
     //  // Initialize socket connection
-    //  useEffect(() => {
-    //     const s = io("https://synceditorfinalb.onrender.com", {
-    //         reconnectionAttempts: 5,
-    //         reconnectionDelay: 1000,
-    //         transports: ["websocket"]
-    //     });
-    //     setSocket(s);
-    //     return () => s.disconnect();
-    // }, []);
+      useEffect(() => {
+         const s = io("https://synceditorfinalb.onrender.com", {
+            reconnectionAttempts: 5,
+             reconnectionDelay: 1000,
+            transports: ["websocket"]
+        });
+        setSocket(s);
+         return () => s.disconnect();
+     }, []);
 
 
 
